@@ -1,6 +1,7 @@
-tmp/
 *.db
 *.sqlite3
+sunflower/tmp/*
+!sunflower/tmp/.gitkeep 
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
