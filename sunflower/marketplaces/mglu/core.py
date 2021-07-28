@@ -40,8 +40,8 @@ class MagazineLuizaSunflower(Sunflower):
                     parent=parent
                 )
             except IntegrityError as e:
-                logging.error(e)
-                logging.error(f"Category '{category['name']}' with initials '{category['initials']}' already exist!")
+                msg = str(e) + ": " + f"'{category['name']}', '{category['initials']}'"
+                logging.warning(msg)
             else:
                 categories.append(c)
         return categories
