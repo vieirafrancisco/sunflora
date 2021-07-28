@@ -1,3 +1,2 @@
 from sunflower.db.database import Database
-
-db = Database()
+from peewee import IntegrityError
