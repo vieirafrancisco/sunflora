@@ -1,6 +1,9 @@
 import logging
+from decouple import config
 
-logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s: %(asctime)s] %(name)s - %(message)s')
+DEBUG = config("DEBUG", cast=bool, default=False)
 
-EXAMPLE_URL = "https://www.magazineluiza.com.br/aspirador-de-po-vertical-philco-1000w-com-filtro-hepa-ph1100-rapid-turbo-pas02v/p/220372700/ep/apdv/"
-MAX_ITER = 10
+logging_level = logging.INFO
+if DEBUG:
+    logging_level = logging.DEBUG
+logging.basicConfig(level=logging_level, format='[%(levelname)s: %(asctime)s] %(name)s - %(message)s')
