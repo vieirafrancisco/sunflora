@@ -10,11 +10,11 @@ class Sunflower(ABC):
         pass
 
     @abstractmethod
-    def get_products_by_category(self, category, max_num=100, save=False, start_page=1):
+    def get_products_by_category(self, category, page=1):
         pass
 
     @abstractmethod
-    def get_random_products(self, save=False):
+    def get_products(self, save=False):
         pass
     
     @abstractmethod

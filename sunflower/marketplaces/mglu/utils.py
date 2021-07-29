@@ -1,11 +1,14 @@
 import os
 import re
+import time
 import requests
+from pprint import pprint
 
 from bs4 import BeautifulSoup
 
 from sunflower.marketplaces.config import CACHE_DIR
 from sunflower.utils import save_html, load_html
+from sunflower.settings import logging
 
 
 def make_GET_request(url, file_name, cache=True):
@@ -16,7 +19,8 @@ def make_GET_request(url, file_name, cache=True):
         if resp.status_code != 200:
             raise Exception(f"Request to url {url} failed.")
         html = resp.text
-        save_html(os.path.join(CACHE_DIR, file_name), html=html)
+        if file_name:
+            save_html(os.path.join(CACHE_DIR, file_name), html=html)
     return html
 
 def regex_categories(html):
@@ -47,3 +51,28 @@ def regex_categories(html):
                 }
             })
     return categories
+
+def regex_products_by_category(category, page):
+    products = list()
+    logging.debug(f"Initialize 'regex_products_by_category'. Category: {category.name}, Page: {page}.")
+    url = f"{category.url}?page={page}"
+    file_name = f"mglu_products_by_category_{category.name}_page_{page}.html"
+    if file_name in os.listdir(CACHE_DIR):
+        html = load_html(os.path.join(CACHE_DIR, file_name))
+    else:
+        logging.info("Sleeping for 30 seconds.")
+        time.sleep(30)
+        html = make_GET_request(url, file_name, cache=True)
+
+    soup = BeautifulSoup(html, "html.parser")
+    product_list = soup.find("ul", {"role": "main"})
+    
+    if product_list is None or "Nenhum produto encontrado" in product_list:
+        return []
+    items = product_list.contents
+    for item in items:
+        products.append({
+            "name": item.contents[-1].h3["title"],
+            "url": item["href"]
+        })
+    return products
