@@ -1,4 +1,5 @@
 import os
 
-TMP_DIR = "sunflower/tmp"
-CACHE_DIR = os.path.join(TMP_DIR, "cache")
+from sunflower.settings import CACHE_DIR
+
+MGLU_CACHE_DIR = os.path.join(CACHE_DIR, "mglu")

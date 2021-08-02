@@ -10,19 +10,23 @@ def api():
     pass
 
 @click.command()
-@click.option("--save", "-s", type=bool)
-@click.option("--cache", "-c", type=bool)
-def load_categories(save=False, cache=True):
+def load_categories():
     """Load categories from mglu marketplace"""
-    categories = mglu.get_categories(save=save, cache=cache)
+    categories = mglu.get_categories()
     logging.debug(f"Loaded {len(categories)} categories.")
 
 @click.command()
-@click.option("--save", "-s", type=bool)
-def load_products(save=False):
+def load_products():
     """Load products from categories"""
-    products = mglu.get_products(save=save)
+    products = mglu.get_products()
     logging.debug(f"Loaded {len(products)} products.")
+
+@click.command()
+@click.option("--product", "-p", type=int, required=True)
+def load_reviews(product):
+    reviews = mglu.get_product_reviews(product)
+    logging.debug(f"Loaded {len(reviews)} reviews.")
 
 api.add_command(load_categories)
 api.add_command(load_products)
+api.add_command(load_reviews)
