@@ -32,6 +32,9 @@ class Product(BaseModel):
     name = CharField()
     url = TextField(unique=True)
 
+    def __str__(self):
+        return f"Product ({self.name})"
+
 
 class ProductCategory(BaseModel):
     product = ForeignKeyField(Product)

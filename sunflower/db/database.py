@@ -30,10 +30,10 @@ class Database(metaclass=DatabaseMeta):
             if self.parse.scheme == "postgresql":
                 self._db = PostgresqlDatabase(
                     self.parse.path[1:],
-                    user=parse.username,
-                    password=parse.password,
-                    host=parse.hostname,
-                    port=parse.port
+                    user=self.parse.username,
+                    password=self.parse.password,
+                    host=self.parse.hostname,
+                    port=self.parse.port
                 )
             else:
                 self._db = SqliteDatabase("sunflower/database.db")
