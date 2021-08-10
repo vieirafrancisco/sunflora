@@ -3,6 +3,11 @@ import logging
 from decouple import config
 from requests_cache import CachedSession
 
+# installed marketplaces
+MARKETPLACES = [
+    "mglu"
+]
+
 # directories
 TMP_DIR = "sunflower/tmp"
 CACHE_DIR = os.path.join(TMP_DIR, "cache")
