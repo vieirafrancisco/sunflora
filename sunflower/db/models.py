@@ -1,4 +1,7 @@
+import re
+
 from peewee import (
+    DateTimeField,
     Model,
     TextField,
     CharField,
@@ -62,6 +65,11 @@ class Product(BaseModel):
     def __str__(self):
         return f"Product ({self.name})"
 
+    @property
+    def web_id(self):
+        regex = re.search(r"p\/(.+?)\/", self.url)
+        return regex.group(1)
+
     @classmethod
     def create_if_not_exist(cls, row):
         try:
@@ -82,35 +90,16 @@ class ProductCategory(BaseModel):
 class Review(BaseModel):
     product = ForeignKeyField(Product, related_name="reviews")
     rating = FloatField()
-    username = CharField()
-    relative_date = CharField()
-    title = CharField()
-    text = TextField()
+    customer_name = CharField(null=True)
+    date = DateTimeField()
+    delta = CharField()
+    web_id = CharField(unique=True)
+    title = CharField(null=True)
+    text = TextField(null=True)
     is_recommended = BooleanField()
-    thumbs_up = IntegerField()
-    thumbs_down = IntegerField()
-    cost_benefit_rate = FloatField()
-    general_quality_rate = FloatField()
-
-    class Meta:
-        indexes = (
-            (
-                (
-                    "product",
-                    "rating",
-                    "username",
-                    "relative_date",
-                    "title",
-                    "text",
-                    "is_recommended",
-                    "thumbs_up",
-                    "thumbs_down",
-                    "cost_benefit_rate",
-                    "general_quality_rate"
-                ),
-                True,
-            ),
-        )
+    likes = IntegerField(default=0)
+    location = CharField(null=True)
+    dislikes = IntegerField(default=0)
 
     @classmethod
     def create_if_not_exist(cls, row):
