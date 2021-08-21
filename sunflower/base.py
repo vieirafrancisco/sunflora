@@ -33,12 +33,15 @@ class BaseCrawler(ABC):
 
     @property
     def html(self):
+        return self.response.text
+
+    @property
+    def response(self):
         if self.url not in session.cache.urls:
             logging.info(f"Sleeping for 30 seconds before requesting {self.url}.")
             time.sleep(30)
         # TODO: solve ConnectionError
-        resp = session.get(self.url)
-        return resp.text
+        return session.get(self.url)
     
     @abstractmethod
     def load(self):
