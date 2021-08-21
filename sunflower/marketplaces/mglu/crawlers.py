@@ -1,3 +1,6 @@
+import time
+import json
+import logging
 from sunflower.base import BaseCrawler
 from .serializers import CategorySerializer, ProductSerializer, ReviewSerializer
 
@@ -27,5 +30,16 @@ class ReviewCrawler(BaseCrawler):
         super().__init__(url, ReviewSerializer)
     
     def load(self):
-        reviews = self.find("div", {"class": "wrapper-reviews__list"})
-        return list(filter(lambda x: x, reviews))
+        try:
+            reviews = self.json_serialize()
+        except Exception as e:
+            logging.error(f"{e}, Sleeping for 60 seconds.")
+            time.sleep(60)
+        else:
+            return list(filter(lambda x: x, reviews))
+        return []
+
+    def json_serialize(self, *args, **kwargs):
+        raw_json = json.loads(self.response.text)
+        items = map(self.serialize, raw_json["data"]["objects"])
+        return list(items)

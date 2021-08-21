@@ -23,12 +23,12 @@ class MagazineLuizaSunflower(BaseSunflower):
                 categories.append(category)
         return categories
 
-    def load_products(self):
+    def load_products(self, max_page=5):
         categories = set(Category.select().where(Category.parent == None).limit(10))
         products = list()
         for category in categories:
             page = 1
-            while True:
+            while page <= max_page:
                 crawler = ProductCrawler(category.url, page=page)
                 products_per_page = crawler.load()
                 if len(products_per_page) == 0:
@@ -41,14 +41,19 @@ class MagazineLuizaSunflower(BaseSunflower):
                 page += 1
         return products
 
-    def load_product_reviews(self, product_id):
+    def load_product_reviews(self, product_id, max_page=5):
         product = Product.select().where(Product.id == product_id).first()
-        crawler = ReviewCrawler(product.url, page=1)
         reviews = list()
-        for row in crawler.load():
-            row["product"] = product
-            review = Review.create_if_not_exist(row)
-            if review is not None:
-                reviews.append(review)
-        # TODO: pagination
+        if product is not None:
+            url = f"https://www.magazineluiza.com.br/review/{product.web_id}/"
+            page = 1
+            while page <= max_page and page < 10:
+                crawler = ReviewCrawler(url, page=page)
+                reviews_per_page = crawler.load()
+                for row in reviews_per_page:
+                    row["product"] = product
+                    review = Review.create_if_not_exist(row)
+                    if review is not None:
+                        reviews.append(review)
+                page += 1
         return reviews
