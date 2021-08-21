@@ -1,8 +1,10 @@
 import setuptools
 
+from sunflower import __version__
+
 setuptools.setup(
     name="sunflower",
-    version="0.1.0",
+    version=__version__,
     packages=setuptools.find_packages(),
     install_requires=(
         "selenium>=3.141.0",
@@ -10,6 +12,8 @@ setuptools.setup(
         "beautifulsoup4>=4.9.3",
         "peewee>=3.14.4",
         "click>=8.0.1",
+        "python-decouple>=3.4"
+        "requests-cache>=0.7.2"
     ),
     entry_points={
         "console_scripts": ["sunflower=sunflower.cli.core:main"]
