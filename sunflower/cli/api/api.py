@@ -11,20 +11,23 @@ def api():
 
 @click.command()
 def load_categories():
-    """Load categories from mglu marketplace"""
+    """Load categories from mglu marketplace."""
     categories = mglu.load_categories()
     logging.info(f"Loaded {len(categories)} categories.")
 
 @click.command()
-def load_products():
-    """Load products from categories"""
-    products = mglu.load_products()
+@click.option("--max-page", "-x", type=int, default=5)
+def load_products(max_page):
+    """Load products from categories."""
+    products = mglu.load_products(max_page=max_page)
     logging.info(f"Loaded {len(products)} products.")
 
 @click.command()
 @click.option("--product", "-p", type=int, required=True)
-def load_reviews(product):
-    reviews = mglu.load_product_reviews(product)
+@click.option("--max-page", "-x", type=int, default=5)
+def load_reviews(product, max_page):
+    """Load reviews from products."""
+    reviews = mglu.load_product_reviews(product, max_page=max_page)
     logging.info(f"Loaded {len(reviews)} reviews.")
 
 api.add_command(load_categories)
