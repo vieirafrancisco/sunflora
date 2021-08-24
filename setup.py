@@ -12,7 +12,7 @@ setuptools.setup(
         "beautifulsoup4>=4.9.3",
         "peewee>=3.14.4",
         "click>=8.0.1",
-        "python-decouple>=3.4"
+        "python-decouple>=3.4",
         "requests-cache>=0.7.2"
     ),
     entry_points={
