@@ -1,4 +1,4 @@
-from pprint import pprint
+import logging
 
 from sunflower.base import BaseSunflower
 from sunflower.db.models import Category, Product, Review
@@ -26,6 +26,7 @@ class MagazineLuizaSunflower(BaseSunflower):
     def load_products(self, max_page=5):
         categories = set(Category.select().where(Category.parent == None).limit(10))
         products = list()
+        saved = 0
         for category in categories:
             page = 1
             while page <= max_page:
@@ -38,6 +39,8 @@ class MagazineLuizaSunflower(BaseSunflower):
                     product = Product.create_if_not_exist(row)
                     if product is not None:
                         products.append(product)
+                logging.info(f"Stored {len(products) - saved} products.")
+                saved = len(products)
                 page += 1
         return products
 

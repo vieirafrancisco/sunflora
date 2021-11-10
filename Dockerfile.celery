@@ -1,0 +1,8 @@
+FROM python:3.9
+
+WORKDIR /usr/src/app
+
+RUN pip install celery[redis]==5.1.2
+
+COPY app.py .
+COPY celery_config.py .
